@@ -1,0 +1,31 @@
+kind: pipeline
+name: default
+
+steps:
+- name: habitat - python
+  image: habitat/default-studio-x86_64-linux:1.5.100
+  privileged: true
+  environment:
+    AUTH_TOKEN:
+      from_secret: AUTH_TOKEN
+  commands:
+  - hab license accept
+  - hab --version
+  - hab origin key download davisvansant -z $AUTH_TOKEN
+  - hab origin key download -s davisvansant -z $AUTH_TOKEN
+  - hab pkg build python -k davisvansant
+  - hab pkg upload -z $AUTH_TOKEN ./results/*python*.hart
+
+- name: ruby
+  image: habitat/default-studio-x86_64-linux:1.5.100
+  privileged: true
+  environment:
+    AUTH_TOKEN:
+      from_secret: AUTH_TOKEN
+  commands:
+  - hab license accept
+  - hab --version
+  - hab origin key download davisvansant -z $AUTH_TOKEN
+  - hab origin key download -s davisvansant -z $AUTH_TOKEN
+  - hab pkg build ruby -k davisvansant
+  - hab pkg upload -z $AUTH_TOKEN ./results/*ruby*.hart
