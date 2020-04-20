@@ -14,7 +14,6 @@ steps:
   - hab origin key download davisvansant -z $AUTH_TOKEN
   - hab origin key download -s davisvansant -z $AUTH_TOKEN
   - hab pkg build python -k davisvansant
-  - hab pkg upload -z $AUTH_TOKEN ./results/*python*.hart
 
 - name: ruby
   image: habitat/default-studio-x86_64-linux:1.5.100
@@ -28,4 +27,29 @@ steps:
   - hab origin key download davisvansant -z $AUTH_TOKEN
   - hab origin key download -s davisvansant -z $AUTH_TOKEN
   - hab pkg build ruby -k davisvansant
-  - hab pkg upload -z $AUTH_TOKEN ./results/*ruby*.hart
+
+- name: rust
+  image: habitat/default-studio-x86_64-linux:1.5.100
+  privileged: true
+  environment:
+    AUTH_TOKEN:
+      from_secret: AUTH_TOKEN
+  commands:
+  - hab license accept
+  - hab --version
+  - hab origin key download davisvansant -z $AUTH_TOKEN
+  - hab origin key download -s davisvansant -z $AUTH_TOKEN
+  - hab pkg build rust -k davisvansant
+
+- name: node
+  image: habitat/default-studio-x86_64-linux:1.5.100
+  privileged: true
+  environment:
+    AUTH_TOKEN:
+      from_secret: AUTH_TOKEN
+  commands:
+  - hab license accept
+  - hab --version
+  - hab origin key download davisvansant -z $AUTH_TOKEN
+  - hab origin key download -s davisvansant -z $AUTH_TOKEN
+  - hab pkg build node -k davisvansant
